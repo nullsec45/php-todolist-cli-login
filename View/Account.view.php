@@ -2,6 +2,7 @@
 namespace View;
 
 use Helper\InputHelper;
+use Helper\InputValidation\LoginValidation;
 use Helper\InputValidation\RegisterValidation;
 use Service\AccountService;
 
@@ -48,21 +49,30 @@ class AccountView{
     public function login(){
         echo "Login".PHP_EOL;
         echo "Enter username and password".PHP_EOL;
-        $status=true;
-        while($status){
+
+        $input=[];
+        while(sizeof($input) == 0){
             $username=InputHelper::input("Username (x for cancel login)"); 
-            if(strtolower($username) === "x"){
-               $status=false;
-               return "exit";
-            }
-            $password=InputHelper::input("Password (x for cancel login)"); 
-            if(strtolower($password) === "x"){
-                $status=false;
+            $usernameValidation=LoginValidation::InputValidation($username);
+            if($usernameValidation){
+                continue;
+            }elseif($usernameValidation === false){
                 return "exit";
-             }
-            $status=$this->accountService->login($username, $password);
+            }
+            array_push($input,$username);
         }
-        return $status;
+        
+        while(sizeof($input) == 1){
+            $password=InputHelper::input("Password (x for cancel login)");
+            $passwordValidation=LoginValidation::InputValidation($password);
+            if($passwordValidation){
+                continue;
+            }elseif($passwordValidation === false){
+                return "exit";
+            }
+            array_push($input, $password);
+        }
+        $this->accountService->login($input[0], $input[1]);
 
     }
     public function register(){
