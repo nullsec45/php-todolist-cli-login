@@ -30,7 +30,12 @@ class RegisterValidation{
 }
 class LoginValidation{
     static public function InputValidation($input){
-        echo (trim($input) === "") ? "Input the username or password!" : "";
+        if(strtolower($input) === "x"){
+            return false;
+        }elseif(trim($input) === ""){
+            echo "Input username / password".PHP_EOL;
+            return true;
+        }
     }
 }
 ?>
