@@ -33,7 +33,7 @@ class LoginValidation{
         if(strtolower($input) === "x"){
             return false;
         }elseif(trim($input) === ""){
-            echo "Input username / password".PHP_EOL;
+            echo "Input username / password!".PHP_EOL;
             return true;
         }
     }
