@@ -18,7 +18,7 @@ $accountService=new AccountService($accountRepository);
 $accountView=new AccountView($accountService);
 
 $login=$accountView->menu();
-if($login === "todolist"){
+while($login === "todolist"){
     $logout=$todoListView->show();
     if($logout === "logout"){
         $login=$accountView->menu();       
