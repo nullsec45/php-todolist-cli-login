@@ -51,29 +51,40 @@ class AccountView{
         echo "Enter username and password".PHP_EOL;
 
         $input=[];
-        while(sizeof($input) == 0){
-            $username=InputHelper::input("Username (x for cancel login)"); 
-            $usernameValidation=LoginValidation::InputValidation($username);
-            if($usernameValidation){
-                continue;
-            }elseif($usernameValidation === false){
-                return "exit";
+        $wrong=true;
+        while($wrong){
+            while(sizeof($input) == 0){
+                $username=InputHelper::input("Username (x for cancel login)"); 
+                $usernameValidation=LoginValidation::InputValidation($username);
+                if($usernameValidation){
+                    continue;
+                }elseif($usernameValidation === false){
+                    return "exit";
+                }
+                array_push($input,$username);
             }
-            array_push($input,$username);
-        }
-        
-        while(sizeof($input) == 1){
-            $password=InputHelper::input("Password (x for cancel login)");
-            $passwordValidation=LoginValidation::InputValidation($password);
-            if($passwordValidation){
-                continue;
-            }elseif($passwordValidation === false){
-                return "exit";
+            
+            while(sizeof($input) == 1){
+                $password=InputHelper::input("Password (x for cancel login)");
+                $passwordValidation=LoginValidation::InputValidation($password);
+                if($passwordValidation){
+                    continue;
+                }elseif($passwordValidation === false){
+                    return "exit";
+                }
+                array_push($input, $password);
             }
-            array_push($input, $password);
+            if($this->accountService->login($input[0], $input[1]) === false){
+                $wrong=false;
+            }else{
+                foreach($input as $key => $value){
+                    unset($input[$key]);
+                }
+                $input=array_values($input);
+                $wrong=true;
+            }
         }
-        $this->accountService->login($input[0], $input[1]);
-
+        return $wrong;
     }
     public function register(){
         echo "Create account".PHP_EOL;
