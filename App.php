@@ -24,6 +24,6 @@ if($login === "todolist"){
         $login=$accountView->menu();       
     }
 }
-echo ($login !== "login") ? $login : "";
+echo ($login !== "todolist") ? $login : "";
 
 
